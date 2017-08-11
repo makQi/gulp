@@ -94,7 +94,6 @@ gulp.task('css', function() {
         // .pipe(rename({suffix:'.min'}))   // 重命名
         .pipe(minifyCss()) // 压缩
         .pipe(gulp.dest(files.outputPath));
-
 });
 
 // JS处理
@@ -146,8 +145,7 @@ gulp.task('auto', ['webServer', 'watch']);
 // 默认任务，按顺序执行
 gulp.task('default', function(callback) {
     runSequence(
-        'clean', 
-        ['script', 'css', 'images'],
+        'clean', ['script', 'css', 'images'],
         'html',
         callback);
 });
