@@ -1,0 +1,40 @@
+{
+  "name": "gulp",
+  "version": "1.0.0",
+  "description": "项目描述说明",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/makQi/gulp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/makQi/gulp/issues"
+  },
+  "homepage": "https://github.com/makQi/gulp#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-webpack": "*",
+    "gulp-rev": "*",
+    "gulp-rev-collector": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-connect": "*",
+    "gulp-livereload": "*",
+    "gulp-changed": "*",
+    "gulp-clean": "*",
+    "gulp-concat": "*",
+    "gulp-imagemin": "*",
+    "gulp-minify-css": "*",
+    "gulp-minify-html": "*",
+    "gulp-rename": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-uglify": "*",
+    "imagemin-pngquant": "*",
+    "run-sequence": "*"
+  }
+}
