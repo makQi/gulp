@@ -127,9 +127,9 @@ gulp.task('html', function() {
 
 // 创建web服务器
 gulp.task('webServer', function() {
-    connect.server({
+    connect.server({ // http:127.0.0.1:8888
         // host: 'www.mak.com',
-        port: 8080, //端口号，可不写，默认8000
+        port: 8888, //端口号，可不写，默认8000
         root: './', //当前项目主目录
         livereload: true //自动刷新
     });
