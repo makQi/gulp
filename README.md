@@ -66,6 +66,7 @@ npm uninstall gulp     删除指定的模块
 更新为：manifest[originalFile] = originalFile + '?v=' + file.revHash;
 
 打开nodemodules\gulp-rev\nodemodules\rev-path\index.js
+
 源码第10行：return filename + '-' + hash + ext;
 更新为：return filename + ext;
 ```
