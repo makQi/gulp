@@ -54,7 +54,36 @@ npm uninstall gulp     删除指定的模块
 >注意：安装完后最好查看其版本号cnpm -v或关闭命令提示符重新打开，安装完直接使用有可能会出现错误。   
 官方网址：http://npm.taobao.org
 
+***
+### 在使用本gulpfile.js，里面的插件gulp-rev和gulp-rev-collector时，需要注意以下事项：     
 
+* gulp-rev插件，请下载“7.1.0”版本，并对该版本源码进行如下修改：     
+
+```
+打开node_modules\gulp-rev\index.js     
+
+源码第144行：manifest[originalFile] = revisionedFile;     
+更新为：manifest[originalFile] = originalFile + '?v=' + file.revHash;     
+
+打开nodemodules\gulp-rev\nodemodules\rev-path\index.js    
+源码第10行：return filename + '-' + hash + ext;     
+更新为：return filename + ext;     
+
+```
+
+* gulp-rev-collector插件，请下载“1.1.0”版本，并对该版本源码进行如下修改：     
+
+```
+打开node_modules\gulp-rev-collector\index.js     
+
+源码第31行：if ( !_.isString(json[key]) || path.basename(json[key]).replace(new RegExp( opts.revSuffix ), '' ) !==  path.basename(key) ) {          
+更新为：if ( !_.isString(json[key]) || path.basename(json[key]).split('?')[0] !== path.basename(key) ) {          
+   
+源码第115行：regexp: new RegExp( '([\/\\\\\'"])' + pattern, 'g' ),     
+更新为：regexp: new RegExp( '([\/\\\\\'"])' + pattern+'(\\?v=\\w{10})?', 'g' ),      
+
+```
+***
 
 # liunx命令
 
