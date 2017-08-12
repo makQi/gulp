@@ -57,7 +57,7 @@ npm uninstall gulp     删除指定的模块
 ***
 ### 在使用本gulpfile.js，里面的插件gulp-rev和gulp-rev-collector时，需要注意以下事项：     
 
-1. gulp-rev插件，请下载“7.1.0”版本，并对该版本源码进行如下修改：     
+* gulp-rev插件，请下载“7.1.0”版本，并对该版本源码进行如下修改：     
 
 ```
 打开node_modules\gulp-rev\index.js     
@@ -71,7 +71,7 @@ npm uninstall gulp     删除指定的模块
 
 ```
 
-2. gulp-rev-collector插件，请下载“1.1.0”版本，并对该版本源码进行如下修改：     
+* gulp-rev-collector插件，请下载“1.1.0”版本，并对该版本源码进行如下修改：     
 
 ```
 打开node_modules\gulp-rev-collector\index.js     
