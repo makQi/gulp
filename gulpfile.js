@@ -1,4 +1,3 @@
-// 载入外挂
 var gulp = require('gulp'),
 
     webpack = require('gulp-webpack'),
@@ -24,13 +23,13 @@ var gulp = require('gulp'),
     // 文件清理
     clean = require('gulp-clean'),
 
-    // 控制task执行顺序
+    // 控制task执行顺序，同步执行
     runSequence = require('run-sequence'),
 
     // 加MD5后缀
     rev = require('gulp-rev'),
 
-    // 替换引用的加了md5后缀的文件名，修改过，用来加cdn前缀
+    // 替换html引用，加了md5后缀的文件名
     revCollector = require('gulp-rev-collector'),
 
     // 文件重命名
@@ -71,6 +70,10 @@ gulp.task('clean', function() {
     return gulp.src(files.clean, { read: false })
         .pipe(clean());
 });
+gulp.task('nodem', function() {
+    return gulp.src('./node_modules', { read: false })
+        .pipe(clean());
+});
 
 // image处理
 gulp.task('images', function() {
@@ -91,18 +94,21 @@ gulp.task('css', function() {
             remove: false,
             cascade: false
         }))
-        // .pipe(rename({suffix:'.min'}))   // 重命名
-        .pipe(minifyCss()) // 压缩
-        .pipe(gulp.dest(files.outputPath));
+        // .pipe(minifyCss()) // 压缩
+        .pipe(rev()) // 加MD5后缀
+        .pipe(gulp.dest(files.outputPath)) // 文件输出路径
+        .pipe(rev.manifest({
+            path: 'rev-manifest-css.json'
+        })) // 加MD5生成json文件
+        .pipe(gulp.dest('./rev')); // json输出地址
 });
 
 // JS处理
 gulp.task('script', function() {
     return gulp.src(files.importPath + '/**/*.js') // 指明源文件路径、并进行文件匹配，代表src下所有html文件以及文件夹里面的html文件
-        // .pipe(rename({ suffix: '.min' })) // 重命名
         .pipe(uglify()) // 压缩 
         .pipe(rev()) // 加MD5后缀
-        .pipe(gulp.dest(files.outputPath)) // 输出路径
+        .pipe(gulp.dest(files.outputPath)) // 文件输出路径
         .pipe(rev.manifest({
             path: 'rev-manifest-js.json'
         })) // 加MD5生成json文件
@@ -112,7 +118,7 @@ gulp.task('script', function() {
 // html处理
 gulp.task('html', function() {
     return gulp.src(['./rev/**/*.json', files.importPath + '/**/*.html'])
-        .pipe(revCollector({ // html的引用替换
+        .pipe(revCollector({
             replaceReved: true
         }))
         // .pipe(minifyHtml()) //压缩 
@@ -138,15 +144,13 @@ gulp.task('watch', function() {
     gulp.watch(files.importPath + '/**/*.js', ['script']); // 监听 js
 });
 
-// 自动监听与刷新页面
-gulp.task('auto', ['webServer', 'watch']);
-// 执行命令：gulp auto
+// 开启，自动监听与刷新页面服务
+gulp.task('auto', ['webServer', 'watch']); // 执行命令：gulp auto
 
 // 默认任务，按顺序执行
-gulp.task('default', function(callback) {
+gulp.task('default', function(callback) { // 执行命令：gulp
     runSequence(
         'clean', ['script', 'css', 'images'],
         'html',
         callback);
 });
-// 执行命令：gulp
