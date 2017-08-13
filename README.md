@@ -79,7 +79,7 @@ npm uninstall gulp     删除指定的模块
 源码第31行：if ( !_.isString(json[key]) || path.basename(json[key]).replace(new RegExp( opts.revSuffix ), '' ) !==  path.basename(key) ) {
 更新为：if ( !_.isString(json[key]) || path.basename(json[key]).split('?')[0] !== path.basename(key) ) {
    
-源码第115行：regexp: new RegExp( '([\/\\\\\'"])' + pattern, 'g' ),
+源码第114行：regexp: new RegExp( '([\/\\\\\'"])' + pattern, 'g' ),
 更新为：regexp: new RegExp( '([\/\\\\\'"])' + pattern+'(\\?v=\\w{10})?', 'g' ), 
 ```
 ***
