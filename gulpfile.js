@@ -1,7 +1,5 @@
 var gulp = require('gulp'),
 
-    webpack = require('gulp-webpack'),
-
     // 只操作修改过的文件
     // .pipe(changed('dist')) 对比文件是否有过改动（此处填写的路径和输出路径保持一致）
     changed = require('gulp-changed'),
