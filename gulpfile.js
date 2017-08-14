@@ -161,3 +161,5 @@ gulp.task('default', function(callback) { // 执行命令：gulp
         'html',
         callback);
 });
+
+// "webpack": "webpack --config webpack.config.js --progress --display-modules --colors --display-reason",  // 命令参数，例如：npm run webpack
