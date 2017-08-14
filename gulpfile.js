@@ -1,5 +1,7 @@
 var gulp = require('gulp'),
 
+    webpack = require('gulp-webpack'),
+
     // 只操作修改过的文件
     // .pipe(changed('dist')) 对比文件是否有过改动（此处填写的路径和输出路径保持一致）
     changed = require('gulp-changed'),
@@ -141,6 +143,13 @@ gulp.task('watch', function() {
     gulp.watch(files.importPath + '/**/*.{png,jpg,gif,svg}', ['images']); // 监听 images
     gulp.watch(files.importPath + '/**/*.js', ['script']); // 监听 js
 });
+
+// gulp-webpack打包JS
+// gulp.task('webpack', function() {
+//     return gulp.src(files.importPath + '/**/*.js')
+//         .pipe(webpack(require('./webpack.config.js')))
+//         .pipe(gulp.dest(files.outputPath))
+// })
 
 // 开启，自动监听与刷新页面服务
 gulp.task('auto', ['webServer', 'watch']); // 执行命令：gulp auto

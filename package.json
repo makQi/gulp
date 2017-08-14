@@ -4,6 +4,7 @@
   "description": "项目描述说明",
   "main": "gulpfile.js",
   "scripts": {
+    // "webpack": "webpack --config webpack.config.js --progress --display-modules --colors --display-reason",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +21,7 @@
   "devDependencies": {
     "gulp": "*",
     "webpack": "*",
+    "gulp-webpack": "*",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-changed": "^3.1.0",
     "gulp-clean": "^0.3.2",
@@ -35,6 +37,7 @@
     "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "^3.0.0",
     "imagemin-pngquant": "^5.0.1",
-    "run-sequence": "^2.1.0"
+    "run-sequence": "^2.1.0",
+    "html-webpack-plugin": "*"
   }
 }
