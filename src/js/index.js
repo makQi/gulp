@@ -1,3 +1,4 @@
-for (var i = 0; i < 3; i++) {
-    console.log(i);
+function index() {
+    console.log('index');
 }
+index();
