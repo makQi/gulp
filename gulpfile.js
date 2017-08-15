@@ -1,77 +1,54 @@
 var gulp = require('gulp'),
-
     webpack = require('gulp-webpack'),
+    changed = require('gulp-changed'), // 只操作修改过的文件，.pipe(changed('dist')) 对比文件是否有过改动（此处填写的路径和输出路径保持一致）
+    sourcemaps = require('gulp-sourcemaps'), // 来源地图，压缩过后，调试代码时使用    
+    sftp = require('gulp-sftp'), // 将代码发布至服务器  
+    concat = require('gulp-concat'), // 合并文件  
+    connect = require('gulp-connect'), // 本地Web服务器
+    livereload = require('gulp-livereload'), // 实时自动刷新页面
+    clean = require('gulp-clean'), // 文件清理
+    runSequence = require('run-sequence'), // 控制task执行顺序，同步执行
+    rev = require('gulp-rev'), // 加MD5后缀
+    revCollector = require('gulp-rev-collector'), // 替换html引用，加了md5后缀的文件名
+    rename = require('gulp-rename'), // 文件重命名
+    autoprefixer = require('gulp-autoprefixer'), // css自动添加前缀    
+    imagemin = require('gulp-imagemin'), // 图片压缩
+    pngquant = require('imagemin-pngquant'), // 深度压缩图片
+    minifyHtml = require('gulp-minify-html'), // html压缩
+    minifyCss = require('gulp-minify-css'), // css压缩
+    uglify = require('gulp-uglify'); // js压缩
 
-    // 只操作修改过的文件
-    // .pipe(changed('dist')) 对比文件是否有过改动（此处填写的路径和输出路径保持一致）
-    changed = require('gulp-changed'),
-
-    // 来源地图，压缩过后，调试代码时使用    
-    // .pipe(sourcemaps.init()) 执行sourcemaps 
-    // .pipe(sourcemaps.write('maps')) 地图输出路径（存放位置）
-    sourcemaps = require('gulp-sourcemaps'),
-
-    // 合并文件
-    concat = require('gulp-concat'),
-
-    // Web服务器
-    connect = require('gulp-connect'),
-
-    // 实时自动刷新页面
-    livereload = require('gulp-livereload'),
-
-    // 文件清理
-    clean = require('gulp-clean'),
-
-    // 控制task执行顺序，同步执行
-    runSequence = require('run-sequence'),
-
-    // 加MD5后缀
-    rev = require('gulp-rev'),
-
-    // 替换html引用，加了md5后缀的文件名
-    revCollector = require('gulp-rev-collector'),
-
-    // 文件重命名
-    //  .pipe(rename({suffix:'.min'}))  重命名
-    rename = require('gulp-rename'),
-
-    // css自动添加前缀    
-    autoprefixer = require('gulp-autoprefixer'),
-
-    // 图片压缩
-    /*.pipe(imagemin({
-      progressive: true, // 无损压缩JPG图片
-      svgoPlugins: [{removeViewBox: false}], // 不移除svg的viewbox属性
-      use: [pngquant()] // 使用pngquant插件进行深度压缩
-    }))*/
-    imagemin = require('gulp-imagemin'),
-
-    // 深度压缩图片
-    pngquant = require('imagemin-pngquant'),
-
-    // html压缩
-    minifyHtml = require('gulp-minify-html'),
-
-    // css压缩
-    minifyCss = require('gulp-minify-css'),
-
-    // js压缩
-    uglify = require('gulp-uglify');
-
+// 定义文件路径
 var files = {
     clean: ['dist', 'rev'], // 清理文件路径
+    upPath: 'dist/**/*.*', // 上传文件路径，通配所有文件
     importPath: 'src', // 源输入路径
     outputPath: 'dist' // 编译后的输出路径
 };
 
+// 合并代码
+gulp.task('concat', function() {
+    return gulp.src(files.importPath + '/js/concat/*.js')
+        .pipe(concat('public.js'))
+        .pipe(gulp.dest(files.importPath + '/js/'));
+});
+
+// 代码发布至服务器
+gulp.task('sftp', function() {
+    return gulp.src(files.upPath)
+        .pipe(sftp({
+            host: 'website.com',
+            port: 8888,
+            key: 'windows',
+            remotePath: '/',
+            user: 'makQi',
+            pass: '12345',
+        }));
+});
+
 // 清理文件
 gulp.task('clean', function() {
     return gulp.src(files.clean, { read: false })
-        .pipe(clean());
-});
-gulp.task('nodem', function() {
-    return gulp.src('./node_modules', { read: false })
         .pipe(clean());
 });
 
@@ -125,7 +102,7 @@ gulp.task('html', function() {
         .pipe(gulp.dest(files.outputPath));
 });
 
-// 创建web服务器
+// 创建web本地服务
 gulp.task('webServer', function() {
     connect.server({ // http:127.0.0.1:8888
         // host: 'www.mak.com',
@@ -149,7 +126,7 @@ gulp.task('watch', function() {
 //     return gulp.src(files.importPath + '/**/*.js')
 //         .pipe(webpack(require('./webpack.config.js')))
 //         .pipe(gulp.dest(files.outputPath))
-// })
+// });
 
 // 开启，自动监听与刷新页面服务
 gulp.task('auto', ['webServer', 'watch']); // 执行命令：gulp auto
@@ -157,6 +134,7 @@ gulp.task('auto', ['webServer', 'watch']); // 执行命令：gulp auto
 // 默认任务，按顺序执行
 gulp.task('default', function(callback) { // 执行命令：gulp
     runSequence(
+        'concat',
         'clean', ['script', 'css', 'images'],
         'html',
         callback);
