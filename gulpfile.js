@@ -47,7 +47,7 @@ gulp.task('sftp', function() {
 });
 
 // 清理文件
-gulp.task('clean', function() {
+gulp.task('clear', function() {
     return gulp.src(files.clean, { read: false })
         .pipe(clean());
 });
@@ -135,7 +135,7 @@ gulp.task('auto', ['webServer', 'watch']); // 执行命令：gulp auto
 gulp.task('default', function(callback) { // 执行命令：gulp
     runSequence(
         'concat',
-        'clean', ['script', 'css', 'images'],
+        'clear', ['script', 'css', 'images'],
         'html',
         callback);
 });
